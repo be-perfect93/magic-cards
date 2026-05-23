@@ -1,0 +1,492 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+#g{border-radius:var(--border-radius-lg);padding:16px;color:#fff;user-select:none;position:relative;min-height:580px;font-family:var(--font-sans);background:#1a1035;transition:background 1.2s ease}
+#g.z0{background:linear-gradient(180deg,#0a1a3a,#0d2b5e)}
+#g.z1{background:linear-gradient(180deg,#2a1400,#5c3308)}
+#g.z2{background:linear-gradient(180deg,#0d0d0d,#1a0a2e)}
+#g.z3{background:linear-gradient(180deg,#1a0000,#3d0000)}
+.sc{display:none;flex-direction:column;align-items:center}.sc.on{display:flex}
+#sp{justify-content:center;min-height:500px;gap:20px}
+#sp h1{font-size:24px;font-weight:500;color:#c9a0ff;letter-spacing:1px;margin-top:50px}
+#sp p{color:#a89bc2;font-size:13px;text-align:center;max-width:280px}
+.btn{background:#6a3fc8;color:#fff;border:none;border-radius:8px;padding:9px 22px;font-size:14px;cursor:pointer;transition:background .15s}
+.btn:hover{background:#7f52df}
+.btn.gd{background:#b8860b}.btn.gd:hover{background:#d4a017}
+.btn.bt{background:#4a2a90;border:1.5px solid #8860cc;font-size:15px;padding:11px 28px}
+.btn.bt:hover{background:#6a3fc8}
+#ins{gap:14px;padding:6px}
+#ins h2{color:#c9a0ff;font-size:16px}
+#ins ul{font-size:12px;color:#c8b8e8;line-height:1.85;padding-left:18px}
+#gp{width:100%;gap:9px}
+.sts{display:flex;gap:8px;justify-content:center;font-size:12px;flex-wrap:wrap}
+.st{background:rgba(42,26,80,.7);padding:5px 10px;border-radius:6px;display:flex;flex-direction:column;align-items:center;gap:1px}
+.st span:first-child{font-size:10px;color:#9080c0}
+.st span:last-child{color:#ffd700;font-weight:500}
+.st .hv{color:#ff9090}
+#zone-tag{font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);text-align:right;padding-right:2px;margin-bottom:2px}
+#zone-wrap{position:relative;width:100%}
+#zone-banner{position:absolute;left:50%;transform:translateX(-50%);top:38%;z-index:20;text-align:center;pointer-events:none;opacity:0;transition:opacity .4s;white-space:nowrap}
+#zone-banner.show{opacity:1}
+#zone-btext{font-size:20px;font-weight:500;letter-spacing:3px;text-transform:uppercase;padding:8px 20px;border-radius:8px;background:rgba(0,0,0,.75);text-shadow:0 0 12px currentColor}
+.gw{display:flex;flex-direction:column;align-items:center;gap:5px;width:100%}
+.cr{display:flex;gap:5px;justify-content:center}
+.card{width:68px;height:96px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:500;position:relative;border:1.5px solid #4a3080;transition:transform .15s,box-shadow .15s}
+.card.fd{background:rgba(42,26,94,.8);border-color:#6a4ab0;cursor:default}
+.card.fd::after{content:'◈';font-size:22px;color:#6a4ab0}
+.card.mo{background:rgba(61,16,16,.9);border-color:#a03030}
+.card.gc{background:rgba(45,32,0,.9);border-color:#b8860b}
+.card.hc{background:rgba(13,45,26,.9);border-color:#2a7a3a}
+.card.em{background:transparent;border:none}
+.card.dc{background:rgba(10,0,16,.9);border-color:#8800cc;box-shadow:0 0 10px rgba(136,0,204,.5)}
+.card.dl{opacity:.5;cursor:not-allowed;pointer-events:none;background:rgba(10,0,16,.9)!important;border-color:#440066!important}
+.card.dl::after{content:'🚫';position:absolute;top:3px;right:3px;font-size:12px}
+.card.pc{background:rgba(0,24,48,.9);border-color:#00aaff;box-shadow:0 0 12px rgba(0,170,255,.5);animation:pp 1.8s ease-in-out infinite}
+.card.pc .ci{font-size:22px}.card.pc .cv{color:#66ddff}
+@keyframes pp{0%,100%{box-shadow:0 0 12px rgba(0,170,255,.5)}50%{box-shadow:0 0 24px rgba(0,200,255,.9)}}
+.card.rc{background:rgba(0,24,48,.9);border-color:#00ffcc;box-shadow:0 0 8px rgba(0,255,200,.3)}
+.card.rc .cv{color:#00ffcc}
+.card.jp{background:rgba(26,16,0,.9);border-color:#ffd700;box-shadow:0 0 14px rgba(255,215,0,.5);animation:jpP 1.5s ease-in-out infinite;cursor:default}
+@keyframes jpP{0%,100%{box-shadow:0 0 14px rgba(255,215,0,.4)}50%{box-shadow:0 0 28px rgba(255,180,0,.9)}}
+.card.sl{cursor:pointer}
+.card.sl:hover{transform:translateY(-4px);box-shadow:0 5px 12px rgba(180,120,255,.4)}
+.card.sd{border-color:#c9a0ff!important;box-shadow:0 0 10px rgba(200,150,255,.6)}
+.card.dm{opacity:.3;pointer-events:none}
+.card.lt{opacity:.45;cursor:not-allowed;pointer-events:none;border-color:#6a2020!important;background:rgba(42,8,8,.9)!important}
+.card.lt::after{content:'☠';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:26px;opacity:.7;pointer-events:none}
+.ci{font-size:20px}.cv{font-size:11px;margin-top:2px}
+.mc{width:68px;height:96px;background:rgba(30,16,64,.85);border:2px solid #9060d0;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;transition:filter .3s}
+.mc.cr2{border-color:#e84040;animation:crp 1s ease-in-out infinite}
+.mc.dy{filter:grayscale(1) brightness(.4);animation:none!important}
+@keyframes crp{0%,100%{border-color:#e84040}50%{border-color:#ff8080}}
+.hbw{width:52px;height:6px;background:#3a2060;border-radius:3px;overflow:hidden}
+.hb{height:100%;border-radius:3px;transition:width .4s,background .4s}
+.hb.sf{background:#e84040}.hb.cr3{background:#ff3030}
+.ht{font-size:10px;color:#ff9090}
+#mm{display:none;position:absolute;inset:0;border-radius:var(--border-radius-lg);z-index:20;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(0,5,20,.92);backdrop-filter:blur(8px)}
+#mm.on{display:flex;animation:po .4s ease forwards}
+.mmt{font-size:15px;color:#66ddff;font-weight:500;letter-spacing:1px}
+.mms{font-size:11px;color:#4488aa}
+#mmr{display:flex;flex-direction:column;align-items:center;gap:12px}
+.mmrw{display:flex;gap:9px;justify-content:center}
+#dv{display:none;position:absolute;inset:0;border-radius:var(--border-radius-lg);z-index:30;align-items:center;justify-content:center;flex-direction:column;gap:8px;pointer-events:none;background:rgba(30,0,50,0)}
+#dv.on{display:flex;animation:sf 1.2s ease forwards}
+#dv .di{font-size:60px;animation:dan .5s ease forwards;opacity:0}
+#dv .dt{font-size:18px;color:#cc44ff;font-weight:500;animation:dan .5s .3s ease forwards;opacity:0}
+@keyframes dan{0%{transform:scale(.3);opacity:0}60%{transform:scale(1.2);opacity:1}100%{transform:scale(1);opacity:1}}
+@keyframes sf{0%{background:rgba(80,0,120,0)}20%{background:rgba(80,0,120,.6)}50%{background:rgba(80,0,120,.3)}80%{background:rgba(80,0,120,.5)}100%{background:rgba(80,0,120,.85)}}
+@keyframes dcp{0%,100%{box-shadow:0 0 10px rgba(136,0,204,.5)}50%{box-shadow:0 0 28px rgba(200,0,255,.9)}}
+.dc.ap{animation:dcp .4s ease 3}
+@keyframes da2{0%{transform:translateY(0) scale(1)}25%{transform:translateY(18px) scale(1.12)}50%{transform:translateY(8px) scale(1.07)}75%{transform:translateY(22px) scale(1.15)}100%{transform:translateY(0) scale(1)}}
+.ada{animation:da2 .6s ease forwards}
+@keyframes fi{0%{transform:scaleY(.05) scaleX(.8);opacity:0}60%{transform:scaleY(1.1) scaleX(.95)}100%{transform:scaleY(1) scaleX(1);opacity:1}}
+@keyframes maa{0%{transform:translateY(0)}30%{transform:translateY(28px) scale(1.1)}55%{transform:translateY(18px) scale(1.05)}75%{transform:translateY(30px) scale(1.1)}100%{transform:translateY(0)}}
+@keyframes ch{0%{transform:translateX(0);filter:none}20%{transform:translateX(-5px);filter:brightness(2) sepia(1) hue-rotate(-20deg)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}100%{transform:translateX(0);filter:none}}
+@keyframes ga{0%{transform:scale(.3) rotate(-15deg);opacity:0}70%{transform:scale(1.12) rotate(3deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes fu{0%{opacity:1;transform:translateY(0) translateX(-50%)}100%{opacity:0;transform:translateY(-38px) translateX(-50%)}}
+@keyframes po{0%{opacity:0;transform:scale(.85)}100%{opacity:1;transform:scale(1)}}
+@keyframes pe{0%{transform:scale(1);opacity:1}50%{transform:scale(1.25);opacity:.8}100%{transform:scale(0);opacity:0}}
+@keyframes pa{0%{transform:translateY(0) scale(1)}25%{transform:translateY(-30px) scale(1.12)}55%{transform:translateY(-18px) scale(1.07)}75%{transform:translateY(-32px) scale(1.15)}100%{transform:translateY(0) scale(1)}}
+@keyframes ms{0%{transform:translateX(0) scale(1)}20%{transform:translateX(-5px) scale(1.05)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}100%{transform:translateX(0) scale(1)}}
+@keyframes mdie{0%{transform:scale(1);opacity:1}50%{transform:scale(1.15);opacity:.6}100%{transform:scale(0);opacity:0}}
+.af{animation:fi .25s ease forwards}
+.aa{animation:maa .5s ease forwards}
+.ah{animation:ch .45s ease forwards}
+.ag{animation:ga .3s ease forwards}
+.ape{animation:pe .5s ease forwards}
+.apa{animation:pa .45s ease forwards}
+.ams{animation:ms .35s ease forwards}
+.amd{animation:mdie .35s ease forwards}
+.fl{position:absolute;top:-9px;left:50%;font-size:12px;font-weight:500;pointer-events:none;animation:fu .9s ease forwards;white-space:nowrap}
+.fdmg{color:#ff5050}.fgd{color:#ffd700}.fhp{color:#80ff80}
+.msg{font-size:12px;color:#c8b0e8;text-align:center;min-height:32px;padding:3px 6px;line-height:1.6}
+.msg.wn{color:#ffcc44}.msg.dn{color:#ff5050}.msg.pt{color:#66ddff}
+.act{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;min-height:40px;align-items:center}
+#wt{gap:14px}
+#wt h2{color:#ffd700;font-size:18px}
+.ts{display:flex;flex-direction:column;gap:7px;width:100%;max-width:280px}
+.tr{padding:7px 12px;border-radius:7px;font-size:13px}
+.tr.t1{background:#3d3000;color:#ffd700}
+.tr.t2{background:#2a3d00;color:#80ff80}
+.tr.t3{background:#3d0030;color:#ff80d0}
+#go{justify-content:center;min-height:400px;gap:16px}
+#go h2{color:#cc44ff;font-size:20px}
+#go p{color:#c8b0e8;font-size:13px;text-align:center;max-width:260px}
+.bet-amt{display:flex;align-items:center;gap:10px;margin-top:4px}
+.bet-amt span{font-size:13px;color:#9080c0}
+.bet-amt input{width:72px;background:rgba(42,26,80,.8);border:1.5px solid #6a4ab0;border-radius:6px;color:#fff;font-size:14px;text-align:center;padding:5px 8px}
+.bet-amt input:focus{outline:none;border-color:#c9a0ff}
+.wallet-go{font-size:13px;color:#ffd700}
+</style>
+
+<div id="g">
+  <div id="dv"><div class="di">💀</div><div class="dt">Death has claimed your soul</div></div>
+  <div id="mm">
+    <div class="mmt">🌀 Another Dimension</div>
+    <div class="mms">Pick 1 reward, then use The Return</div>
+    <div id="mmr"></div>
+    <div style="font-size:11px;color:#336688;margin-top:3px" id="mmm"></div>
+  </div>
+
+  <div id="sp" class="sc on">
+    <h1>⚔ Card Dungeon</h1>
+    <p>Fight monsters, dodge The Reaper, find portals — collect gold!</p>
+    <button class="btn" onclick="SS('ins')">How to play →</button>
+    <button class="btn" style="background:#3a2060" onclick="startGame(10)">Play now ▶</button>
+  </div>
+
+  <div id="ins" class="sc">
+    <h2>How to Play</h2>
+    <ul>
+      <li><b>10 HP</b> · <b>1000G wallet</b> · 20 rows × 3 cols</li>
+      <li>Each <b>Place Bet</b> costs <b>10G</b></li>
+      <li>🐉 Monster in your column attacks first → turns to 💰</li>
+      <li>Move into another monster: you fight it (costs HP!)</li>
+      <li>Zones: 🌊 Ocean → 🏜️ Desert → 🏰 Dungeon → 🔥 Hell</li>
+      <li>☠ Locked if DMG ≥ HP &nbsp;·&nbsp; 💀 Reaper = instant death</li>
+      <li>🌀 Portal: choose to enter for bonus rewards or skip</li>
+      <li>🏆 Clear all 20 rows → Jackpot +100G!</li>
+      <li>Gold only hits wallet on <b>Cash Out</b></li>
+    </ul>
+    <button class="btn" onclick="startGame(10)" style="margin-top:10px">Play ▶</button>
+  </div>
+
+  <div id="gp" class="sc">
+    <div class="sts">
+      <div class="st"><span>Row</span><span id="rd">0/20</span></div>
+      <div class="st"><span>HP</span><span class="hv" id="hd">10/10</span></div>
+      <div class="st"><span>Wallet</span><span id="wlt">1000</span></div>
+      <div class="st"><span>Pending</span><span id="gd2">0</span></div>
+    </div>
+    <div id="zone-wrap">
+      <div id="zone-tag"></div>
+      <div id="zone-banner"><div id="zone-btext"></div></div>
+      <div class="gw" id="gw"></div>
+    </div>
+    <div class="msg" id="mg"></div>
+    <div class="act" id="ac"></div>
+  </div>
+
+  <div id="wt" class="sc">
+    <h2>🏆 Result</h2>
+    <div id="fr" style="font-size:14px;color:#c8b0e8;text-align:center;line-height:1.9"></div>
+    <div class="ts">
+      <div class="tr t1">🥇 Legendary — &gt;100 gold</div>
+      <div class="tr t2">🥈 Hero — 50–100 gold</div>
+      <div class="tr t3">🥉 Traveler — &lt;50 gold</div>
+    </div>
+    <button class="btn" onclick="startGame(10)" style="margin-top:6px">Play Again (10G)</button>
+    <button class="btn" style="background:#3a2060;margin-top:4px" onclick="SS('sp')">Home</button>
+  </div>
+
+  <div id="go" class="sc">
+    <h2 id="gt">💀 Defeated!</h2>
+    <p id="gm"></p>
+    <div class="wallet-go" id="wgo"></div>
+    <div class="bet-amt"><span>Bet:</span><input type="number" id="bet-input" value="10" min="1" max="9999"/></div>
+    <button class="btn bt" onclick="onBetRetry()">⚔ Place Bet &amp; Play Again</button>
+    <button class="btn" style="background:#3a2060;margin-top:4px;font-size:13px" onclick="SS('sp')">Home</button>
+  </div>
+</div>
+
+<script>
+const COLS=3,ROWS=20,MHP=10,WALLET_START=1000,BET=10;
+const ZONES=[
+  {name:'🌊 Ocean',cls:'z0',color:'#7ecfff',rows:[0,4]},
+  {name:'🏜️ Desert',cls:'z1',color:'#ffc66d',rows:[5,9]},
+  {name:'🏰 Dungeon',cls:'z2',color:'#b06cff',rows:[10,14]},
+  {name:'🔥 Hell',cls:'z3',color:'#ff6060',rows:[15,20]},
+];
+let S={},LK=false,WALLET=WALLET_START,prevZone=-1;
+
+function SS(id){document.querySelectorAll('.sc').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on')}
+function ri(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function mdmg(r){return r<5?ri(3,5):Math.random()<0.05?ri(6,7):ri(3,5)}
+function mk(r){
+  const x=Math.random();
+  if(r>=5){
+    if(x<0.02)return{t:'portal'};
+    if(x<0.10)return{t:'death'};
+    if(x<0.60)return{t:'monster',d:mdmg(r)};
+    if(x<0.85)return{t:'gold',v:ri(3,11)};
+    return{t:'hp',v:ri(1,3)};
+  }
+  if(x<0.02)return{t:'death'};
+  if(x<0.12)return{t:'portal'};
+  if(x<0.32)return{t:'monster',d:mdmg(r)};
+  if(x<0.72)return{t:'gold',v:ri(3,11)};
+  return{t:'hp',v:ri(1,3)};
+}
+
+function zoneOf(row){for(let i=0;i<ZONES.length;i++)if(row>=ZONES[i].rows[0]&&row<=ZONES[i].rows[1])return i;return ZONES.length-1}
+function applyZone(row,animate){
+  const idx=zoneOf(row),el=document.getElementById('g');
+  ZONES.forEach((_,i)=>el.classList.remove('z'+i));
+  el.classList.add(ZONES[idx].cls);
+  const tag=document.getElementById('zone-tag');if(tag)tag.textContent=ZONES[idx].name;
+  if(animate&&idx!==prevZone&&prevZone!==-1)showBanner(idx);
+  prevZone=idx;
+}
+async function showBanner(idx){
+  const b=document.getElementById('zone-banner'),t=document.getElementById('zone-btext');
+  if(!b||!t)return;
+  t.textContent='— '+ZONES[idx].name+' —';t.style.color=ZONES[idx].color;
+  b.classList.add('show');await dl(1600);b.classList.remove('show');
+}
+
+function onBetRetry(){const raw=parseInt(document.getElementById('bet-input').value,10);startGame(isNaN(raw)||raw<1?BET:raw)}
+
+function startGame(bet){
+  document.getElementById('dv').classList.remove('on');
+  document.getElementById('mm').classList.remove('on');
+  prevZone=-1;
+  S={hp:MHP,mhp:MHP,pg:0,bet:bet||BET,row:0,
+    mat:Array.from({length:ROWS},(_,r)=>Array.from({length:COLS},()=>mk(r))),
+    mc:1,ph:'idle',mmR:false};
+  LK=false;SS('gp');applyZone(0,false);bg();setM('Press Place Bet to begin!');sa('bet');
+}
+
+function bg(){
+  const w=document.getElementById('gw');w.innerHTML='';
+  for(let o=2;o>=0;o--){
+    const mr=S.row+o,row=document.createElement('div');row.className='cr';
+    for(let c=0;c<COLS;c++){
+      const d=document.createElement('div');d.id='c'+o+'_'+c;
+      if(mr===ROWS){d.className='card jp';d.innerHTML='<div class="ci">🏆</div><div class="cv" style="color:#ffd700">JACKPOT</div><div class="cv" style="color:#ffaa00">+100G</div>';}
+      else d.className='card '+(mr>ROWS?'em':'fd');
+      row.appendChild(d);
+    }
+    w.appendChild(row);
+  }
+  const cr=document.createElement('div');cr.className='cr';
+  for(let c=0;c<COLS;c++){
+    if(c===S.mc){
+      const m=document.createElement('div');m.className='mc'+(crit()?'cr2':'');m.id='mch';
+      m.innerHTML=`<div style="font-size:26px">🧙</div><div class="hbw"><div class="hb ${crit()?'cr3':'sf'}" id="hb" style="width:${pt()}%"></div></div><div class="ht" id="ht">${S.hp}/${S.mhp}</div>`;
+      cr.appendChild(m);
+    } else {const p=document.createElement('div');p.className='card em';cr.appendChild(p);}
+  }
+  w.appendChild(cr);us();
+}
+
+function gc(o,c){return document.getElementById('c'+o+'_'+c)}
+function fu(el,card){
+  el.className='card';
+  if(card.t==='portal'){el.classList.add('pc');el.innerHTML='<div class="ci">🌀</div><div class="cv">The Portal</div>'}
+  else if(card.t==='death'){el.classList.add('dc');el.innerHTML='<div class="ci">💀</div><div class="cv" style="color:#cc44ff">The Reaper</div>'}
+  else if(card.t==='monster'){el.classList.add('mo');el.innerHTML=`<div class="ci">🐉</div><div class="cv">-${card.d} HP</div>`}
+  else if(card.t==='gold'){el.classList.add('gc');el.innerHTML=`<div class="ci">💰</div><div class="cv">+${card.v}G</div>`}
+  else{el.classList.add('hc');el.innerHTML=`<div class="ci">💚</div><div class="cv">+${card.v} HP</div>`}
+}
+function isL(c){return c.t==='monster'&&c.d>=S.hp}
+function crit(){return S.hp<=3}
+function pt(){return Math.max(0,S.hp/S.mhp*100)}
+
+function sa(mode){
+  const a=document.getElementById('ac');a.innerHTML='';
+  if(mode==='bet'){const b=document.createElement('button');b.className='btn';b.textContent='⚔ Place Bet ('+BET+'G)';b.onclick=onBet;a.appendChild(b)}
+  else if(mode==='choose'){const b=document.createElement('button');b.className='btn gd';b.textContent='💰 Cash Out';b.onclick=cOut;a.appendChild(b)}
+}
+function onBet(){
+  if(LK)return;
+  if(WALLET<BET){setM('Not enough gold! ('+WALLET+'G left)','dn');return}
+  WALLET-=BET;us();rRound();
+}
+
+async function rRound(){
+  LK=true;S.ph='idle';sa('none');
+  const mr=S.row;
+  if(mr>=ROWS){LK=false;cOut();return}
+  setM('Revealing cards...');
+  for(let c=0;c<COLS;c++){
+    await dl(110);const el=gc(0,c);
+    if(!el||el.classList.contains('em')||el.classList.contains('jp'))continue;
+    fu(el,S.mat[mr][c]);el.classList.add('af');
+  }
+  await dl(330);
+  const mc2=S.mat[mr][S.mc];
+  if(mc2.t==='death'){await hDA();return}
+
+  // Monster in main col attacks
+  if(mc2.t==='monster'){
+    setM('🐉 Monster attacks!');
+    const mEl=gc(0,S.mc),ch=document.getElementById('mch');
+    mEl&&mEl.classList.add('aa');await dl(190);
+    ch&&ch.classList.add('ah');fl(ch,'-'+mc2.d+' HP','fdmg');
+    S.hp-=mc2.d;uhb();await dl(530);
+    mEl&&mEl.classList.remove('aa');ch&&ch.classList.remove('ah');
+    if(S.hp<=0){S.hp=0;uhb();setM('You died! 💀');await dl(900);tGO('monster');return}
+    await dl(140);
+    const gv=ri(2,6);S.mat[mr][S.mc]={t:'gold',v:gv};
+    const gEl=gc(0,S.mc);
+    if(gEl){gEl.className='card gc ag';gEl.innerHTML=`<div class="ci">💰</div><div class="cv">+${gv}G</div>`}
+    await dl(330);
+  }
+
+  // Make all safe cards selectable (including portal in main col)
+  let lc=0,dc2=0;
+  for(let c=0;c<COLS;c++){
+    const el=gc(0,c);if(!el||el.classList.contains('em')||el.classList.contains('jp'))continue;
+    const card=S.mat[mr][c];
+    if(card.t==='death'){el.classList.add('dl');dc2++}
+    else if(isL(card)){el.classList.add('lt');lc++}
+    else{el.classList.add('sl');const col=c;el.onclick=()=>pCard(col)}
+  }
+
+  if(dc2>0&&lc>0)setM('💀☠ Dangerous cards locked!','dn');
+  else if(dc2>0)setM('💀 Reaper locked! Stay away.','wn');
+  else if(lc>0)setM('⚠ Lethal card locked — DMG ≥ HP!','wn');
+  else if(S.mat[mr][S.mc].t==='portal')setM('🌀 Portal in your path! Enter or pick another.','pt');
+  else setM('Choose a card to move forward!');
+
+  S.ph='choose';LK=false;sa('choose');
+}
+
+// Portal entry animation then minimap
+async function enterPortal(col){
+  LK=true;sa('none');
+  for(let c=0;c<COLS;c++){const el=gc(0,c);if(el){el.onclick=null;el.classList.remove('sl')};c===col?el&&el.classList.add('sd'):el&&el.classList.add('dm')}
+  setM('🌀 Entering the Portal...','pt');
+  const pEl=gc(0,col);if(pEl)pEl.style.animation='pp .3s ease 4';
+  await dl(700);
+  const ch=document.getElementById('mch');ch&&ch.classList.add('ape');
+  await dl(480);S.mc=col;S.row++;applyZone(S.row,true);oMM();
+}
+
+function oMM(){
+  S.mmR=false;
+  const ov=document.getElementById('mm'),mmr=document.getElementById('mmr'),mm=document.getElementById('mmm');
+  mmr.innerHTML='';mm.textContent='Pick 1 reward, then use The Return';mm.style.color='#4488aa';
+  ov.classList.add('on');
+
+  // Top: Return card (locked)
+  const rc=document.createElement('div');rc.className='card rc';rc.id='rrc';
+  rc.style.opacity='.4';rc.style.pointerEvents='none';
+  rc.innerHTML='<div class="ci">🔙</div><div class="cv">The Return</div>';
+  mmr.appendChild(rc);
+
+  // Middle: 3 reward cards
+  const rw=document.createElement('div');rw.className='mmrw';
+  [{t:'gold',v:2,l:'+2 Gold'},{t:'gold',v:3,l:'+3 Gold'},{t:'hp',v:5,l:'+5 HP'}]
+    .sort(()=>Math.random()-.5)
+    .forEach((r,i)=>{
+      const card=document.createElement('div');
+      card.className='card '+(r.t==='hp'?'hc':'gc')+' sl';
+      card.style.animation=`fi .25s ${i*.1}s ease both`;
+      card.innerHTML=`<div class="ci">${r.t==='hp'?'💚':'💰'}</div><div class="cv">${r.l}</div>`;
+      card.onclick=()=>pMMR(card,r,rw,mm);
+      rw.appendChild(card);
+    });
+  mmr.appendChild(rw);
+
+  // Bottom: player char
+  const ch=document.createElement('div');ch.className='mc';
+  ch.innerHTML=`<div style="font-size:26px">🧙</div><div class="hbw"><div class="hb ${crit()?'cr3':'sf'}" style="width:${pt()}%"></div></div><div class="ht">${S.hp}/${S.mhp}</div>`;
+  mmr.appendChild(ch);
+}
+
+function pMMR(el,rw,rowEl,mm){
+  if(S.mmR)return;S.mmR=true;
+  rowEl.querySelectorAll('.card.sl').forEach(c=>{c.onclick=null;c.classList.remove('sl');c===el?c.classList.add('sd'):c.classList.add('dm')});
+  if(rw.t==='gold'){S.pg+=rw.v;mm.textContent=`+${rw.v}G added! Use The Return to go back.`;mm.style.color='#ffd700'}
+  else{const g=Math.min(rw.v,S.mhp-S.hp);S.hp=Math.min(S.mhp,S.hp+rw.v);mm.textContent=`+${g} HP restored! Use The Return.`;mm.style.color='#80ff80'}
+  us();
+  const rc=document.getElementById('rrc');
+  if(rc){rc.style.opacity='1';rc.style.pointerEvents='auto';rc.classList.add('sl');rc.onclick=doRet}
+}
+async function doRet(){
+  const ov=document.getElementById('mm');ov.style.animation='po .3s ease reverse forwards';
+  await dl(280);ov.classList.remove('on');ov.style.animation='';
+  if(S.row>=ROWS){cOut();return}
+  bg();setM('🌀 Returned from Portal!','pt');await dl(380);LK=false;await rRound();
+}
+
+async function pCard(col){
+  if(LK||S.ph!=='choose')return;
+  const el=gc(0,col);
+  if(!el||el.classList.contains('lt')||el.classList.contains('dl'))return;
+  const card=S.mat[S.row][col];
+
+  // Portal: enter it
+  if(card.t==='portal'){await enterPortal(col);return}
+
+  LK=true;S.ph='idle';sa('none');
+  for(let c=0;c<COLS;c++){
+    const e=gc(0,c);if(!e)continue;e.onclick=null;e.classList.remove('sl');
+    if(!e.classList.contains('lt')&&!e.classList.contains('dl'))
+      c===col?e.classList.add('sd'):e.classList.add('dm');
+  }
+  await dl(180);
+
+  if(card.t==='monster'){
+    setM('⚔ You attack the monster!');
+    const ch=document.getElementById('mch'),mEl=gc(0,col);
+    ch&&ch.classList.add('apa');await dl(200);
+    mEl&&mEl.classList.add('ams');fl(mEl,'-'+card.d+' HP','fdmg');
+    S.hp-=card.d;uhb();await dl(350);
+    ch&&ch.classList.remove('apa');mEl&&mEl.classList.remove('ams');
+    if(S.hp<=0){S.hp=0;uhb();setM('You were slain! 💀');await dl(900);tGO('monster');return}
+    mEl&&mEl.classList.add('amd');await dl(340);
+    const gv=ri(2,6);S.mat[S.row][col]={t:'gold',v:gv};
+    if(mEl){mEl.className='card gc ag';mEl.innerHTML=`<div class="ci">💰</div><div class="cv">+${gv}G</div>`}
+    await dl(300);S.pg+=gv;fl(gc(0,col),'+'+gv+'G','fgd');setM('Monster defeated! +'+gv+'G');us();
+  } else if(card.t==='gold'){
+    S.pg+=card.v;fl(gc(0,col),'+'+card.v+'G','fgd');setM('+'+card.v+'G added!');us();
+  } else if(card.t==='hp'){
+    const g=Math.min(card.v,S.mhp-S.hp);S.hp=Math.min(S.mhp,S.hp+card.v);uhb();
+    fl(gc(0,col),'+'+g+' HP','fhp');setM('+'+g+' HP!');
+  } else setM('Moving up...');
+
+  await dl(480);S.mc=col;S.row++;
+  if(S.row>=ROWS){setM('Matrix cleared! 🎉');await dl(480);cOut();return}
+  applyZone(S.row,true);bg();setM('');await dl(140);await rRound();
+}
+
+async function hDA(){
+  const dEl=gc(0,S.mc),ch=document.getElementById('mch');
+  setM('💀 The Reaper appears!','dn');
+  dEl&&dEl.classList.add('ap');await dl(1250);dEl&&dEl.classList.remove('ap');
+  setM('💀 The Reaper claims your soul...','dn');
+  dEl&&dEl.classList.add('ada');await dl(280);
+  ch&&ch.classList.add('dy');fl(ch,'💀 INSTANT KILL','fdmg');await dl(380);
+  S.hp=0;uhb();await dl(280);dEl&&dEl.classList.remove('ada');
+  document.getElementById('dv').classList.add('on');await dl(1750);
+  document.getElementById('dv').classList.remove('on');ch&&ch.classList.remove('dy');
+  tGO('death');
+}
+
+function tGO(cause){
+  document.getElementById('gt').textContent=cause==='death'?'💀 The Reaper has claimed you!':'💀 Defeated!';
+  document.getElementById('gm').textContent=`You bet ${S.bet}G and lost at row ${S.row}. Pending gold (${S.pg}G) is gone.`;
+  document.getElementById('wgo').textContent='💰 Wallet: '+WALLET+'G remaining';
+  document.getElementById('bet-input').value=BET;
+  SS('go');
+}
+function cOut(){
+  if(S.row===0)return;
+  if(S.row>=ROWS)S.pg+=100;
+  WALLET+=S.pg;
+  const g=S.pg,tier=g>100?'🥇 Legendary':g>=50?'🥈 Hero':'🥉 Traveler';
+  document.getElementById('fr').innerHTML=`You reached row <b>${S.row}</b><br>Cashed out <b>${g}</b> gold 🪙${S.row>=ROWS?'<br>🏆 Jackpot +100G!':''}<br>💰 Wallet: <b>${WALLET}G</b><br>Rank: <b>${tier}</b>`;
+  SS('wt');
+}
+function uhb(){
+  const b=document.getElementById('hb'),t=document.getElementById('ht');
+  if(b){b.style.width=pt()+'%';b.className='hb '+(crit()?'cr3':'sf')}
+  if(t)t.textContent=S.hp+'/'+S.mhp;
+  const m=document.getElementById('mch');if(m){crit()?m.classList.add('cr2'):m.classList.remove('cr2')}
+  us();
+}
+function us(){
+  const r=document.getElementById('rd'),h=document.getElementById('hd'),g=document.getElementById('gd2'),w=document.getElementById('wlt');
+  if(r)r.textContent=S.row+'/20';if(h)h.textContent=S.hp+'/'+S.mhp;
+  if(g)g.textContent=S.pg;if(w)w.textContent=WALLET;
+}
+function fl(parent,txt,cls){
+  if(!parent)return;
+  const f=document.createElement('div');f.className='fl '+cls;f.textContent=txt;
+  parent.appendChild(f);setTimeout(()=>f.remove(),920);
+}
+function setM(t,cl=''){const el=document.getElementById('mg');if(!el)return;el.textContent=t;el.className='msg'+(cl?' '+cl:'')}
+function dl(ms){return new Promise(r=>setTimeout(r,ms))}
+</script>
