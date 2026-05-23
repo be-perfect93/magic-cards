@@ -1,37 +1,112 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1a1035">
+<title>Card Dungeon</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-#g{border-radius:var(--border-radius-lg);padding:16px;color:#fff;user-select:none;position:relative;min-height:580px;font-family:var(--font-sans);background:#1a1035;transition:background 1.2s ease}
+:root{
+  --card-w:68px;--card-h:96px;--gap:5px;
+  --row-w:calc(var(--card-w)*3 + var(--gap)*2);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{background:#0d0820;display:flex;justify-content:center;align-items:center;font-family:system-ui,-apple-system,sans-serif;touch-action:manipulation}
+
+/* ── OUTER WRAPPER ── */
+#wrap{
+  width:100%;max-width:420px;height:100%;max-height:820px;
+  display:flex;flex-direction:column;
+  position:relative;overflow:hidden;
+}
+
+/* ── GAME CONTAINER ── */
+#g{
+  flex:1;overflow:hidden;
+  border-radius:0;padding:12px;
+  color:#fff;user-select:none;position:relative;
+  background:#1a1035;transition:background 1.2s ease;
+  display:flex;flex-direction:column;
+}
+@media(min-width:440px){
+  #wrap{border-radius:16px;height:auto;min-height:600px;max-height:90vh}
+  #g{border-radius:16px}
+}
 #g.z0{background:linear-gradient(180deg,#0a1a3a,#0d2b5e)}
 #g.z1{background:linear-gradient(180deg,#2a1400,#5c3308)}
 #g.z2{background:linear-gradient(180deg,#0d0d0d,#1a0a2e)}
 #g.z3{background:linear-gradient(180deg,#1a0000,#3d0000)}
-.sc{display:none;flex-direction:column;align-items:center}.sc.on{display:flex}
-#sp{justify-content:center;min-height:500px;gap:20px}
-#sp h1{font-size:24px;font-weight:500;color:#c9a0ff;letter-spacing:1px;margin-top:50px}
+
+.sc{display:none;flex-direction:column;align-items:center;flex:1}
+.sc.on{display:flex}
+
+/* ── SPLASH ── */
+#sp{justify-content:center;gap:18px}
+#sp h1{font-size:clamp(20px,5vw,26px);font-weight:500;color:#c9a0ff;letter-spacing:1px;margin-top:40px}
 #sp p{color:#a89bc2;font-size:13px;text-align:center;max-width:280px}
-.btn{background:#6a3fc8;color:#fff;border:none;border-radius:8px;padding:9px 22px;font-size:14px;cursor:pointer;transition:background .15s}
-.btn:hover{background:#7f52df}
-.btn.gd{background:#b8860b}.btn.gd:hover{background:#d4a017}
-.btn.bt{background:#4a2a90;border:1.5px solid #8860cc;font-size:15px;padding:11px 28px}
-.btn.bt:hover{background:#6a3fc8}
-#ins{gap:14px;padding:6px}
+
+/* ── BUTTONS ── */
+.btn{
+  background:#6a3fc8;color:#fff;border:none;border-radius:8px;
+  padding:10px 24px;font-size:14px;cursor:pointer;
+  transition:background .15s;min-height:44px; /* iOS touch target */
+  -webkit-appearance:none;
+}
+.btn:active{background:#5a2fb8}
+.btn.gd{background:#b8860b}.btn.gd:active{background:#a07009}
+.btn.bt{background:#4a2a90;border:1.5px solid #8860cc;font-size:15px;padding:12px 28px}
+.btn.bt:active{background:#6a3fc8}
+
+/* ── INSTRUCTIONS ── */
+#ins{gap:12px;padding:4px;overflow-y:auto}
 #ins h2{color:#c9a0ff;font-size:16px}
 #ins ul{font-size:12px;color:#c8b8e8;line-height:1.85;padding-left:18px}
-#gp{width:100%;gap:9px}
-.sts{display:flex;gap:8px;justify-content:center;font-size:12px;flex-wrap:wrap}
-.st{background:rgba(42,26,80,.7);padding:5px 10px;border-radius:6px;display:flex;flex-direction:column;align-items:center;gap:1px}
-.st span:first-child{font-size:10px;color:#9080c0}
-.st span:last-child{color:#ffd700;font-weight:500}
+
+/* ── GAMEPLAY ── */
+#gp{width:100%;gap:7px}
+
+.sts{display:flex;gap:6px;justify-content:center;font-size:12px;flex-wrap:wrap}
+.st{background:rgba(42,26,80,.7);padding:4px 8px;border-radius:6px;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:56px}
+.st span:first-child{font-size:9px;color:#9080c0;text-transform:uppercase;letter-spacing:.5px}
+.st span:last-child{color:#ffd700;font-weight:500;font-size:13px}
 .st .hv{color:#ff9090}
-#zone-tag{font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);text-align:right;padding-right:2px;margin-bottom:2px}
-#zone-wrap{position:relative;width:100%}
+
+#zone-tag{font-size:9px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.35);text-align:right;padding-right:2px;margin-bottom:1px}
+#zone-wrap{position:relative;width:100%;flex:1;min-height:0}
 #zone-banner{position:absolute;left:50%;transform:translateX(-50%);top:38%;z-index:20;text-align:center;pointer-events:none;opacity:0;transition:opacity .4s;white-space:nowrap}
 #zone-banner.show{opacity:1}
-#zone-btext{font-size:20px;font-weight:500;letter-spacing:3px;text-transform:uppercase;padding:8px 20px;border-radius:8px;background:rgba(0,0,0,.75);text-shadow:0 0 12px currentColor}
-.gw{display:flex;flex-direction:column;align-items:center;gap:5px;width:100%}
-.cr{display:flex;gap:5px;justify-content:center}
-.card{width:68px;height:96px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:500;position:relative;border:1.5px solid #4a3080;transition:transform .15s,box-shadow .15s}
+#zone-btext{font-size:clamp(14px,4vw,20px);font-weight:500;letter-spacing:3px;text-transform:uppercase;padding:7px 16px;border-radius:8px;background:rgba(0,0,0,.8);text-shadow:0 0 12px currentColor}
+
+/* ── CARD GRID ── */
+.gw{
+  display:flex;flex-direction:column;align-items:center;
+  gap:var(--gap);width:100%;
+}
+.cr{display:flex;gap:var(--gap);justify-content:center}
+
+/* ── RESPONSIVE CARD SIZING ── */
+.card{
+  width:var(--card-w);height:var(--card-h);
+  border-radius:8px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  font-size:10px;font-weight:500;position:relative;
+  border:1.5px solid #4a3080;
+  transition:transform .15s,box-shadow .15s;
+  flex-shrink:0;
+}
+
+/* Scale cards on small screens */
+@media(max-width:360px){
+  :root{--card-w:60px;--card-h:84px}
+  .ci{font-size:17px!important}
+}
+@media(max-width:320px){
+  :root{--card-w:52px;--card-h:74px}
+}
+
 .card.fd{background:rgba(42,26,94,.8);border-color:#6a4ab0;cursor:default}
 .card.fd::after{content:'◈';font-size:22px;color:#6a4ab0}
 .card.mo{background:rgba(61,16,16,.9);border-color:#a03030}
@@ -42,37 +117,49 @@
 .card.dl{opacity:.5;cursor:not-allowed;pointer-events:none;background:rgba(10,0,16,.9)!important;border-color:#440066!important}
 .card.dl::after{content:'🚫';position:absolute;top:3px;right:3px;font-size:12px}
 .card.pc{background:rgba(0,24,48,.9);border-color:#00aaff;box-shadow:0 0 12px rgba(0,170,255,.5);animation:pp 1.8s ease-in-out infinite}
-.card.pc .ci{font-size:22px}.card.pc .cv{color:#66ddff}
+.card.pc .ci{font-size:22px!important}.card.pc .cv{color:#66ddff}
 @keyframes pp{0%,100%{box-shadow:0 0 12px rgba(0,170,255,.5)}50%{box-shadow:0 0 24px rgba(0,200,255,.9)}}
 .card.rc{background:rgba(0,24,48,.9);border-color:#00ffcc;box-shadow:0 0 8px rgba(0,255,200,.3)}
 .card.rc .cv{color:#00ffcc}
 .card.jp{background:rgba(26,16,0,.9);border-color:#ffd700;box-shadow:0 0 14px rgba(255,215,0,.5);animation:jpP 1.5s ease-in-out infinite;cursor:default}
 @keyframes jpP{0%,100%{box-shadow:0 0 14px rgba(255,215,0,.4)}50%{box-shadow:0 0 28px rgba(255,180,0,.9)}}
 .card.sl{cursor:pointer}
-.card.sl:hover{transform:translateY(-4px);box-shadow:0 5px 12px rgba(180,120,255,.4)}
+.card.sl:active{transform:translateY(-4px);box-shadow:0 5px 12px rgba(180,120,255,.5)}
+@media(hover:hover){.card.sl:hover{transform:translateY(-4px);box-shadow:0 5px 12px rgba(180,120,255,.4)}}
 .card.sd{border-color:#c9a0ff!important;box-shadow:0 0 10px rgba(200,150,255,.6)}
 .card.dm{opacity:.3;pointer-events:none}
 .card.lt{opacity:.45;cursor:not-allowed;pointer-events:none;border-color:#6a2020!important;background:rgba(42,8,8,.9)!important}
 .card.lt::after{content:'☠';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:26px;opacity:.7;pointer-events:none}
-.ci{font-size:20px}.cv{font-size:11px;margin-top:2px}
-.mc{width:68px;height:96px;background:rgba(30,16,64,.85);border:2px solid #9060d0;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;transition:filter .3s}
+.ci{font-size:20px}.cv{font-size:10px;margin-top:2px;text-align:center;padding:0 2px}
+
+/* ── MAIN CHARACTER ── */
+.mc{
+  width:var(--card-w);height:var(--card-h);
+  background:rgba(30,16,64,.9);border:2px solid #9060d0;
+  border-radius:10px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:3px;transition:filter .3s;
+}
 .mc.cr2{border-color:#e84040;animation:crp 1s ease-in-out infinite}
 .mc.dy{filter:grayscale(1) brightness(.4);animation:none!important}
 @keyframes crp{0%,100%{border-color:#e84040}50%{border-color:#ff8080}}
-.hbw{width:52px;height:6px;background:#3a2060;border-radius:3px;overflow:hidden}
+.hbw{width:calc(var(--card-w) - 16px);height:6px;background:#3a2060;border-radius:3px;overflow:hidden}
 .hb{height:100%;border-radius:3px;transition:width .4s,background .4s}
 .hb.sf{background:#e84040}.hb.cr3{background:#ff3030}
 .ht{font-size:10px;color:#ff9090}
-#mm{display:none;position:absolute;inset:0;border-radius:var(--border-radius-lg);z-index:20;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(0,5,20,.92);backdrop-filter:blur(8px)}
+
+/* ── MINIMAP ── */
+#mm{display:none;position:absolute;inset:0;border-radius:inherit;z-index:20;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(0,5,20,.93);backdrop-filter:blur(8px)}
 #mm.on{display:flex;animation:po .4s ease forwards}
 .mmt{font-size:15px;color:#66ddff;font-weight:500;letter-spacing:1px}
-.mms{font-size:11px;color:#4488aa}
+.mms{font-size:11px;color:#4488aa;text-align:center;padding:0 12px}
 #mmr{display:flex;flex-direction:column;align-items:center;gap:12px}
 .mmrw{display:flex;gap:9px;justify-content:center}
-#dv{display:none;position:absolute;inset:0;border-radius:var(--border-radius-lg);z-index:30;align-items:center;justify-content:center;flex-direction:column;gap:8px;pointer-events:none;background:rgba(30,0,50,0)}
+
+/* ── DEATH OVERLAY ── */
+#dv{display:none;position:absolute;inset:0;border-radius:inherit;z-index:30;align-items:center;justify-content:center;flex-direction:column;gap:8px;pointer-events:none;background:rgba(30,0,50,0)}
 #dv.on{display:flex;animation:sf 1.2s ease forwards}
 #dv .di{font-size:60px;animation:dan .5s ease forwards;opacity:0}
-#dv .dt{font-size:18px;color:#cc44ff;font-weight:500;animation:dan .5s .3s ease forwards;opacity:0}
+#dv .dt{font-size:18px;color:#cc44ff;font-weight:500;animation:dan .5s .3s ease forwards;opacity:0;text-align:center;padding:0 20px}
 @keyframes dan{0%{transform:scale(.3);opacity:0}60%{transform:scale(1.2);opacity:1}100%{transform:scale(1);opacity:1}}
 @keyframes sf{0%{background:rgba(80,0,120,0)}20%{background:rgba(80,0,120,.6)}50%{background:rgba(80,0,120,.3)}80%{background:rgba(80,0,120,.5)}100%{background:rgba(80,0,120,.85)}}
 @keyframes dcp{0%,100%{box-shadow:0 0 10px rgba(136,0,204,.5)}50%{box-shadow:0 0 28px rgba(200,0,255,.9)}}
@@ -81,7 +168,7 @@
 .ada{animation:da2 .6s ease forwards}
 @keyframes fi{0%{transform:scaleY(.05) scaleX(.8);opacity:0}60%{transform:scaleY(1.1) scaleX(.95)}100%{transform:scaleY(1) scaleX(1);opacity:1}}
 @keyframes maa{0%{transform:translateY(0)}30%{transform:translateY(28px) scale(1.1)}55%{transform:translateY(18px) scale(1.05)}75%{transform:translateY(30px) scale(1.1)}100%{transform:translateY(0)}}
-@keyframes ch{0%{transform:translateX(0);filter:none}20%{transform:translateX(-5px);filter:brightness(2) sepia(1) hue-rotate(-20deg)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}100%{transform:translateX(0);filter:none}}
+@keyframes cha{0%{transform:translateX(0);filter:none}20%{transform:translateX(-5px);filter:brightness(2) sepia(1) hue-rotate(-20deg)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}100%{transform:translateX(0);filter:none}}
 @keyframes ga{0%{transform:scale(.3) rotate(-15deg);opacity:0}70%{transform:scale(1.12) rotate(3deg)}100%{transform:scale(1) rotate(0);opacity:1}}
 @keyframes fu{0%{opacity:1;transform:translateY(0) translateX(-50%)}100%{opacity:0;transform:translateY(-38px) translateX(-50%)}}
 @keyframes po{0%{opacity:0;transform:scale(.85)}100%{opacity:1;transform:scale(1)}}
@@ -91,7 +178,7 @@
 @keyframes mdie{0%{transform:scale(1);opacity:1}50%{transform:scale(1.15);opacity:.6}100%{transform:scale(0);opacity:0}}
 .af{animation:fi .25s ease forwards}
 .aa{animation:maa .5s ease forwards}
-.ah{animation:ch .45s ease forwards}
+.ah{animation:cha .45s ease forwards}
 .ag{animation:ga .3s ease forwards}
 .ape{animation:pe .5s ease forwards}
 .apa{animation:pa .45s ease forwards}
@@ -99,26 +186,48 @@
 .amd{animation:mdie .35s ease forwards}
 .fl{position:absolute;top:-9px;left:50%;font-size:12px;font-weight:500;pointer-events:none;animation:fu .9s ease forwards;white-space:nowrap}
 .fdmg{color:#ff5050}.fgd{color:#ffd700}.fhp{color:#80ff80}
-.msg{font-size:12px;color:#c8b0e8;text-align:center;min-height:32px;padding:3px 6px;line-height:1.6}
+
+/* ── MSG + ACTIONS ── */
+.msg{font-size:12px;color:#c8b0e8;text-align:center;min-height:28px;padding:2px 6px;line-height:1.5}
 .msg.wn{color:#ffcc44}.msg.dn{color:#ff5050}.msg.pt{color:#66ddff}
-.act{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;min-height:40px;align-items:center}
-#wt{gap:14px}
+.act{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;min-height:44px;align-items:center}
+
+/* ── RESULTS ── */
+#wt{gap:14px;overflow-y:auto}
 #wt h2{color:#ffd700;font-size:18px}
-.ts{display:flex;flex-direction:column;gap:7px;width:100%;max-width:280px}
+.ts{display:flex;flex-direction:column;gap:7px;width:100%;max-width:300px}
 .tr{padding:7px 12px;border-radius:7px;font-size:13px}
 .tr.t1{background:#3d3000;color:#ffd700}
 .tr.t2{background:#2a3d00;color:#80ff80}
 .tr.t3{background:#3d0030;color:#ff80d0}
-#go{justify-content:center;min-height:400px;gap:16px}
+
+/* ── GAME OVER ── */
+#go{justify-content:center;gap:14px;overflow-y:auto}
 #go h2{color:#cc44ff;font-size:20px}
-#go p{color:#c8b0e8;font-size:13px;text-align:center;max-width:260px}
+#go p{color:#c8b0e8;font-size:13px;text-align:center;max-width:260px;line-height:1.6}
 .bet-amt{display:flex;align-items:center;gap:10px;margin-top:4px}
 .bet-amt span{font-size:13px;color:#9080c0}
-.bet-amt input{width:72px;background:rgba(42,26,80,.8);border:1.5px solid #6a4ab0;border-radius:6px;color:#fff;font-size:14px;text-align:center;padding:5px 8px}
+.bet-amt input{
+  width:80px;background:rgba(42,26,80,.8);border:1.5px solid #6a4ab0;
+  border-radius:6px;color:#fff;font-size:16px;text-align:center;
+  padding:6px 8px;-webkit-appearance:none;
+}
 .bet-amt input:focus{outline:none;border-color:#c9a0ff}
 .wallet-go{font-size:13px;color:#ffd700}
-</style>
 
+/* ── SAFE AREA for notch phones ── */
+@supports(padding:max(0px)){
+  #g{
+    padding-top:max(12px,env(safe-area-inset-top));
+    padding-bottom:max(12px,env(safe-area-inset-bottom));
+    padding-left:max(12px,env(safe-area-inset-left));
+    padding-right:max(12px,env(safe-area-inset-right));
+  }
+}
+</style>
+</head>
+<body>
+<div id="wrap">
 <div id="g">
   <div id="dv"><div class="di">💀</div><div class="dt">Death has claimed your soul</div></div>
   <div id="mm">
@@ -143,7 +252,7 @@
       <li>🐉 Monster in your column attacks first → turns to 💰</li>
       <li>Move into another monster: you fight it (costs HP!)</li>
       <li>Zones: 🌊 Ocean → 🏜️ Desert → 🏰 Dungeon → 🔥 Hell</li>
-      <li>☠ Locked if DMG ≥ HP &nbsp;·&nbsp; 💀 Reaper = instant death</li>
+      <li>☠ Locked if DMG ≥ HP · 💀 Reaper = instant death</li>
       <li>🌀 Portal: choose to enter for bonus rewards or skip</li>
       <li>🏆 Clear all 20 rows → Jackpot +100G!</li>
       <li>Gold only hits wallet on <b>Cash Out</b></li>
@@ -183,10 +292,11 @@
     <h2 id="gt">💀 Defeated!</h2>
     <p id="gm"></p>
     <div class="wallet-go" id="wgo"></div>
-    <div class="bet-amt"><span>Bet:</span><input type="number" id="bet-input" value="10" min="1" max="9999"/></div>
+    <div class="bet-amt"><span>Bet:</span><input type="number" id="bet-input" value="10" min="1" max="9999" inputmode="numeric"/></div>
     <button class="btn bt" onclick="onBetRetry()">⚔ Place Bet &amp; Play Again</button>
     <button class="btn" style="background:#3a2060;margin-top:4px;font-size:13px" onclick="SS('sp')">Home</button>
   </div>
+</div>
 </div>
 
 <script>
@@ -217,7 +327,6 @@ function mk(r){
   if(x<0.72)return{t:'gold',v:ri(3,11)};
   return{t:'hp',v:ri(1,3)};
 }
-
 function zoneOf(row){for(let i=0;i<ZONES.length;i++)if(row>=ZONES[i].rows[0]&&row<=ZONES[i].rows[1])return i;return ZONES.length-1}
 function applyZone(row,animate){
   const idx=zoneOf(row),el=document.getElementById('g');
@@ -233,9 +342,7 @@ async function showBanner(idx){
   t.textContent='— '+ZONES[idx].name+' —';t.style.color=ZONES[idx].color;
   b.classList.add('show');await dl(1600);b.classList.remove('show');
 }
-
 function onBetRetry(){const raw=parseInt(document.getElementById('bet-input').value,10);startGame(isNaN(raw)||raw<1?BET:raw)}
-
 function startGame(bet){
   document.getElementById('dv').classList.remove('on');
   document.getElementById('mm').classList.remove('on');
@@ -245,7 +352,6 @@ function startGame(bet){
     mc:1,ph:'idle',mmR:false};
   LK=false;SS('gp');applyZone(0,false);bg();setM('Press Place Bet to begin!');sa('bet');
 }
-
 function bg(){
   const w=document.getElementById('gw');w.innerHTML='';
   for(let o=2;o>=0;o--){
@@ -262,18 +368,17 @@ function bg(){
   for(let c=0;c<COLS;c++){
     if(c===S.mc){
       const m=document.createElement('div');m.className='mc'+(crit()?'cr2':'');m.id='mch';
-      m.innerHTML=`<div style="font-size:26px">🧙</div><div class="hbw"><div class="hb ${crit()?'cr3':'sf'}" id="hb" style="width:${pt()}%"></div></div><div class="ht" id="ht">${S.hp}/${S.mhp}</div>`;
+      m.innerHTML=`<div style="font-size:clamp(22px,6vw,28px)">🧙</div><div class="hbw"><div class="hb ${crit()?'cr3':'sf'}" id="hb" style="width:${pt()}%"></div></div><div class="ht" id="ht">${S.hp}/${S.mhp}</div>`;
       cr.appendChild(m);
     } else {const p=document.createElement('div');p.className='card em';cr.appendChild(p);}
   }
   w.appendChild(cr);us();
 }
-
 function gc(o,c){return document.getElementById('c'+o+'_'+c)}
 function fu(el,card){
   el.className='card';
-  if(card.t==='portal'){el.classList.add('pc');el.innerHTML='<div class="ci">🌀</div><div class="cv">The Portal</div>'}
-  else if(card.t==='death'){el.classList.add('dc');el.innerHTML='<div class="ci">💀</div><div class="cv" style="color:#cc44ff">The Reaper</div>'}
+  if(card.t==='portal'){el.classList.add('pc');el.innerHTML='<div class="ci">🌀</div><div class="cv">Portal</div>'}
+  else if(card.t==='death'){el.classList.add('dc');el.innerHTML='<div class="ci">💀</div><div class="cv" style="color:#cc44ff">Reaper</div>'}
   else if(card.t==='monster'){el.classList.add('mo');el.innerHTML=`<div class="ci">🐉</div><div class="cv">-${card.d} HP</div>`}
   else if(card.t==='gold'){el.classList.add('gc');el.innerHTML=`<div class="ci">💰</div><div class="cv">+${card.v}G</div>`}
   else{el.classList.add('hc');el.innerHTML=`<div class="ci">💚</div><div class="cv">+${card.v} HP</div>`}
@@ -281,7 +386,6 @@ function fu(el,card){
 function isL(c){return c.t==='monster'&&c.d>=S.hp}
 function crit(){return S.hp<=3}
 function pt(){return Math.max(0,S.hp/S.mhp*100)}
-
 function sa(mode){
   const a=document.getElementById('ac');a.innerHTML='';
   if(mode==='bet'){const b=document.createElement('button');b.className='btn';b.textContent='⚔ Place Bet ('+BET+'G)';b.onclick=onBet;a.appendChild(b)}
@@ -292,11 +396,9 @@ function onBet(){
   if(WALLET<BET){setM('Not enough gold! ('+WALLET+'G left)','dn');return}
   WALLET-=BET;us();rRound();
 }
-
 async function rRound(){
   LK=true;S.ph='idle';sa('none');
-  const mr=S.row;
-  if(mr>=ROWS){LK=false;cOut();return}
+  const mr=S.row;if(mr>=ROWS){LK=false;cOut();return}
   setM('Revealing cards...');
   for(let c=0;c<COLS;c++){
     await dl(110);const el=gc(0,c);
@@ -306,8 +408,6 @@ async function rRound(){
   await dl(330);
   const mc2=S.mat[mr][S.mc];
   if(mc2.t==='death'){await hDA();return}
-
-  // Monster in main col attacks
   if(mc2.t==='monster'){
     setM('🐉 Monster attacks!');
     const mEl=gc(0,S.mc),ch=document.getElementById('mch');
@@ -322,8 +422,6 @@ async function rRound(){
     if(gEl){gEl.className='card gc ag';gEl.innerHTML=`<div class="ci">💰</div><div class="cv">+${gv}G</div>`}
     await dl(330);
   }
-
-  // Make all safe cards selectable (including portal in main col)
   let lc=0,dc2=0;
   for(let c=0;c<COLS;c++){
     const el=gc(0,c);if(!el||el.classList.contains('em')||el.classList.contains('jp'))continue;
@@ -332,64 +430,47 @@ async function rRound(){
     else if(isL(card)){el.classList.add('lt');lc++}
     else{el.classList.add('sl');const col=c;el.onclick=()=>pCard(col)}
   }
-
   if(dc2>0&&lc>0)setM('💀☠ Dangerous cards locked!','dn');
   else if(dc2>0)setM('💀 Reaper locked! Stay away.','wn');
-  else if(lc>0)setM('⚠ Lethal card locked — DMG ≥ HP!','wn');
-  else if(S.mat[mr][S.mc].t==='portal')setM('🌀 Portal in your path! Enter or pick another.','pt');
-  else setM('Choose a card to move forward!');
-
+  else if(lc>0)setM('⚠ Lethal locked — DMG ≥ HP!','wn');
+  else if(S.mat[mr][S.mc].t==='portal')setM('🌀 Portal! Enter or pick another.','pt');
+  else setM('Choose a card!');
   S.ph='choose';LK=false;sa('choose');
 }
-
-// Portal entry animation then minimap
 async function enterPortal(col){
   LK=true;sa('none');
-  for(let c=0;c<COLS;c++){const el=gc(0,c);if(el){el.onclick=null;el.classList.remove('sl')};c===col?el&&el.classList.add('sd'):el&&el.classList.add('dm')}
-  setM('🌀 Entering the Portal...','pt');
+  for(let c=0;c<COLS;c++){const el=gc(0,c);if(!el)continue;el.onclick=null;el.classList.remove('sl');c===col?el.classList.add('sd'):el.classList.add('dm')}
+  setM('🌀 Entering Portal...','pt');
   const pEl=gc(0,col);if(pEl)pEl.style.animation='pp .3s ease 4';
-  await dl(700);
-  const ch=document.getElementById('mch');ch&&ch.classList.add('ape');
+  await dl(700);const ch=document.getElementById('mch');ch&&ch.classList.add('ape');
   await dl(480);S.mc=col;S.row++;applyZone(S.row,true);oMM();
 }
-
 function oMM(){
   S.mmR=false;
   const ov=document.getElementById('mm'),mmr=document.getElementById('mmr'),mm=document.getElementById('mmm');
-  mmr.innerHTML='';mm.textContent='Pick 1 reward, then use The Return';mm.style.color='#4488aa';
-  ov.classList.add('on');
-
-  // Top: Return card (locked)
+  mmr.innerHTML='';mm.textContent='Pick 1 reward, then use The Return';mm.style.color='#4488aa';ov.classList.add('on');
   const rc=document.createElement('div');rc.className='card rc';rc.id='rrc';
   rc.style.opacity='.4';rc.style.pointerEvents='none';
-  rc.innerHTML='<div class="ci">🔙</div><div class="cv">The Return</div>';
-  mmr.appendChild(rc);
-
-  // Middle: 3 reward cards
+  rc.innerHTML='<div class="ci">🔙</div><div class="cv">The Return</div>';mmr.appendChild(rc);
   const rw=document.createElement('div');rw.className='mmrw';
-  [{t:'gold',v:2,l:'+2 Gold'},{t:'gold',v:3,l:'+3 Gold'},{t:'hp',v:5,l:'+5 HP'}]
-    .sort(()=>Math.random()-.5)
-    .forEach((r,i)=>{
+  [{t:'gold',v:2,l:'+2G'},{t:'gold',v:3,l:'+3G'},{t:'hp',v:5,l:'+5 HP'}]
+    .sort(()=>Math.random()-.5).forEach((r,i)=>{
       const card=document.createElement('div');
       card.className='card '+(r.t==='hp'?'hc':'gc')+' sl';
       card.style.animation=`fi .25s ${i*.1}s ease both`;
       card.innerHTML=`<div class="ci">${r.t==='hp'?'💚':'💰'}</div><div class="cv">${r.l}</div>`;
-      card.onclick=()=>pMMR(card,r,rw,mm);
-      rw.appendChild(card);
+      card.onclick=()=>pMMR(card,r,rw,mm);rw.appendChild(card);
     });
   mmr.appendChild(rw);
-
-  // Bottom: player char
   const ch=document.createElement('div');ch.className='mc';
   ch.innerHTML=`<div style="font-size:26px">🧙</div><div class="hbw"><div class="hb ${crit()?'cr3':'sf'}" style="width:${pt()}%"></div></div><div class="ht">${S.hp}/${S.mhp}</div>`;
   mmr.appendChild(ch);
 }
-
 function pMMR(el,rw,rowEl,mm){
   if(S.mmR)return;S.mmR=true;
   rowEl.querySelectorAll('.card.sl').forEach(c=>{c.onclick=null;c.classList.remove('sl');c===el?c.classList.add('sd'):c.classList.add('dm')});
-  if(rw.t==='gold'){S.pg+=rw.v;mm.textContent=`+${rw.v}G added! Use The Return to go back.`;mm.style.color='#ffd700'}
-  else{const g=Math.min(rw.v,S.mhp-S.hp);S.hp=Math.min(S.mhp,S.hp+rw.v);mm.textContent=`+${g} HP restored! Use The Return.`;mm.style.color='#80ff80'}
+  if(rw.t==='gold'){S.pg+=rw.v;mm.textContent=`+${rw.v}G added!`;mm.style.color='#ffd700'}
+  else{const g=Math.min(rw.v,S.mhp-S.hp);S.hp=Math.min(S.mhp,S.hp+rw.v);mm.textContent=`+${g} HP restored!`;mm.style.color='#80ff80'}
   us();
   const rc=document.getElementById('rrc');
   if(rc){rc.style.opacity='1';rc.style.pointerEvents='auto';rc.classList.add('sl');rc.onclick=doRet}
@@ -400,16 +481,12 @@ async function doRet(){
   if(S.row>=ROWS){cOut();return}
   bg();setM('🌀 Returned from Portal!','pt');await dl(380);LK=false;await rRound();
 }
-
 async function pCard(col){
   if(LK||S.ph!=='choose')return;
   const el=gc(0,col);
   if(!el||el.classList.contains('lt')||el.classList.contains('dl'))return;
   const card=S.mat[S.row][col];
-
-  // Portal: enter it
   if(card.t==='portal'){await enterPortal(col);return}
-
   LK=true;S.ph='idle';sa('none');
   for(let c=0;c<COLS;c++){
     const e=gc(0,c);if(!e)continue;e.onclick=null;e.classList.remove('sl');
@@ -417,9 +494,8 @@ async function pCard(col){
       c===col?e.classList.add('sd'):e.classList.add('dm');
   }
   await dl(180);
-
   if(card.t==='monster'){
-    setM('⚔ You attack the monster!');
+    setM('⚔ You attack!');
     const ch=document.getElementById('mch'),mEl=gc(0,col);
     ch&&ch.classList.add('apa');await dl(200);
     mEl&&mEl.classList.add('ams');fl(mEl,'-'+card.d+' HP','fdmg');
@@ -429,19 +505,17 @@ async function pCard(col){
     mEl&&mEl.classList.add('amd');await dl(340);
     const gv=ri(2,6);S.mat[S.row][col]={t:'gold',v:gv};
     if(mEl){mEl.className='card gc ag';mEl.innerHTML=`<div class="ci">💰</div><div class="cv">+${gv}G</div>`}
-    await dl(300);S.pg+=gv;fl(gc(0,col),'+'+gv+'G','fgd');setM('Monster defeated! +'+gv+'G');us();
+    await dl(300);S.pg+=gv;fl(gc(0,col),'+'+gv+'G','fgd');setM('Monster down! +'+gv+'G');us();
   } else if(card.t==='gold'){
     S.pg+=card.v;fl(gc(0,col),'+'+card.v+'G','fgd');setM('+'+card.v+'G added!');us();
   } else if(card.t==='hp'){
     const g=Math.min(card.v,S.mhp-S.hp);S.hp=Math.min(S.mhp,S.hp+card.v);uhb();
     fl(gc(0,col),'+'+g+' HP','fhp');setM('+'+g+' HP!');
   } else setM('Moving up...');
-
   await dl(480);S.mc=col;S.row++;
   if(S.row>=ROWS){setM('Matrix cleared! 🎉');await dl(480);cOut();return}
   applyZone(S.row,true);bg();setM('');await dl(140);await rRound();
 }
-
 async function hDA(){
   const dEl=gc(0,S.mc),ch=document.getElementById('mch');
   setM('💀 The Reaper appears!','dn');
@@ -451,31 +525,27 @@ async function hDA(){
   ch&&ch.classList.add('dy');fl(ch,'💀 INSTANT KILL','fdmg');await dl(380);
   S.hp=0;uhb();await dl(280);dEl&&dEl.classList.remove('ada');
   document.getElementById('dv').classList.add('on');await dl(1750);
-  document.getElementById('dv').classList.remove('on');ch&&ch.classList.remove('dy');
-  tGO('death');
+  document.getElementById('dv').classList.remove('on');ch&&ch.classList.remove('dy');tGO('death');
 }
-
 function tGO(cause){
   document.getElementById('gt').textContent=cause==='death'?'💀 The Reaper has claimed you!':'💀 Defeated!';
   document.getElementById('gm').textContent=`You bet ${S.bet}G and lost at row ${S.row}. Pending gold (${S.pg}G) is gone.`;
   document.getElementById('wgo').textContent='💰 Wallet: '+WALLET+'G remaining';
-  document.getElementById('bet-input').value=BET;
-  SS('go');
+  document.getElementById('bet-input').value=BET;SS('go');
 }
 function cOut(){
   if(S.row===0)return;
   if(S.row>=ROWS)S.pg+=100;
   WALLET+=S.pg;
   const g=S.pg,tier=g>100?'🥇 Legendary':g>=50?'🥈 Hero':'🥉 Traveler';
-  document.getElementById('fr').innerHTML=`You reached row <b>${S.row}</b><br>Cashed out <b>${g}</b> gold 🪙${S.row>=ROWS?'<br>🏆 Jackpot +100G!':''}<br>💰 Wallet: <b>${WALLET}G</b><br>Rank: <b>${tier}</b>`;
+  document.getElementById('fr').innerHTML=`Row <b>${S.row}</b> reached<br>Cashed out <b>${g}</b> gold 🪙${S.row>=ROWS?'<br>🏆 Jackpot +100G!':''}<br>💰 Wallet: <b>${WALLET}G</b><br>Rank: <b>${tier}</b>`;
   SS('wt');
 }
 function uhb(){
   const b=document.getElementById('hb'),t=document.getElementById('ht');
   if(b){b.style.width=pt()+'%';b.className='hb '+(crit()?'cr3':'sf')}
   if(t)t.textContent=S.hp+'/'+S.mhp;
-  const m=document.getElementById('mch');if(m){crit()?m.classList.add('cr2'):m.classList.remove('cr2')}
-  us();
+  const m=document.getElementById('mch');if(m){crit()?m.classList.add('cr2'):m.classList.remove('cr2')}us();
 }
 function us(){
   const r=document.getElementById('rd'),h=document.getElementById('hd'),g=document.getElementById('gd2'),w=document.getElementById('wlt');
@@ -490,3 +560,5 @@ function fl(parent,txt,cls){
 function setM(t,cl=''){const el=document.getElementById('mg');if(!el)return;el.textContent=t;el.className='msg'+(cl?' '+cl:'')}
 function dl(ms){return new Promise(r=>setTimeout(r,ms))}
 </script>
+</body>
+</html>
